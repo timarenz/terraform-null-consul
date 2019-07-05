@@ -4,30 +4,44 @@ resource "null_resource" "dependencies" {
   }
 }
 
-resource "random_id" "gossip_encryption_key" {
+resource "random_id" "encryption_key" {
   byte_length = 16
 }
 
 locals {
-  gossip_encryption_key = var.gossip_encryption ? var.gossip_encryption_key == null ? random_id.gossip_encryption_key.b64_std : var.gossip_encryption_key : null
-  server                = var.agent_type == "server" ? true : false
-  consul_version        = var.consul_version == null ? "" : var.consul_version
+  encryption_key = var.encryption ? var.encryption_key == null ? random_id.encryption_key.b64_std : var.encryption_key : null
+  consul_version = var.consul_version == null ? "" : var.consul_version
   config_file = templatefile("${path.module}/templates/consul.json.tpl", {
-    dc_name               = var.dc_name,
-    server                = local.server
-    ui                    = var.ui
-    tls                   = var.tls
-    data_dir              = var.data_dir
-    connect               = var.connect
-    bootstrap_expect      = var.bootstrap_expect,
-    bind_address          = var.bind_address,
-    gossip_encryption_key = local.gossip_encryption_key,
-    retry_join            = jsonencode(var.retry_join),
-    gossip_encryption     = var.gossip_encryption
+    datacenter                 = var.datacenter,
+    agent_type                 = var.agent_type
+    ui                         = var.ui
+    data_dir                   = var.data_dir
+    connect                    = var.connect
+    bootstrap                  = var.bootstrap
+    bootstrap_expect           = var.bootstrap_expect
+    bind_addr                  = var.bind_addr == null ? false : var.bind_addr
+    encryption_key             = local.encryption_key
+    retry_join                 = jsonencode(var.retry_join)
+    encryption                 = var.encryption
+    enable_local_script_checks = var.enable_local_script_checks
+    serf_lan                   = var.serf_lan == null ? false : var.serf_lan
+    serf_wan                   = var.serf_wan == null ? false : var.serf_wan
+    advertise_addr_wan         = var.advertise_addr_wan == null ? false : var.advertise_addr_wan
+    advertise_addr             = var.advertise_addr == null ? false : var.advertise_addr
+    translate_wan_addrs        = var.translate_wan_addrs
+    log_level                  = var.log_level
+    dns_port                   = var.dns_port
+    http_port                  = var.http_port
+    https_port                 = var.https_port
+    grpc_port                  = var.grpc_port
+    serf_lan_port              = var.serf_lan_port
+    serf_wan_port              = var.serf_wan_port
+    server_port                = var.server_port
+    sidecar_min_port           = var.sidecar_min_port
+    sidecar_max_port           = var.sidecar_max_port
     }
   )
 }
-
 
 # data "template_file" "consul_server_conf" {
 #   template = file("${path.module}/templates/consul-server.json.tpl")
@@ -36,7 +50,7 @@ locals {
 #     dc_name          = var.dc_name
 #     bootstrap_expect = var.bootstrap_expect
 #     bind_address     = var.bind_address
-#     encryption_key   = local.gossip_encryption_key
+#     encryption_key   = local.encryption_key
 #     retry_join       = jsonencode(var.retry_join)
 #   }
 # }
@@ -114,6 +128,9 @@ resource "null_resource" "install" {
 
 resource "null_resource" "configure" {
   depends_on = ["null_resource.install"]
+  # triggers = {
+  #   config_file_changed = local.config_file
+  # }
 
   connection {
     type        = "ssh"

@@ -7,6 +7,7 @@ sudo chown root:root consul
 sudo mv consul /usr/local/bin/
 consul --version
 
+consul -autocomplete-uninstall || true
 consul -autocomplete-install
 complete -C /usr/local/bin/consul consul
 
