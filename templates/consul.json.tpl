@@ -1,5 +1,6 @@
 {
   "datacenter": "${datacenter}",
+  %{ if primary_datacenter != "false" }"primary_datacenter": "${primary_datacenter}",%{ endif }
   "data_dir": "${data_dir}",
   %{ if agent_type == "server" }
   "server": true,
@@ -9,6 +10,7 @@
   },
   %{ endif }
   "retry_join": ${retry_join},
+  %{ if retry_join_wan != false }"retry_join_wan": ${retry_join_wan},%{ endif }
   %{ if encryption }"encrypt": "${encryption_key}",%{ endif }
   "ui": ${ui},
   %{ if serf_lan != "false" }"serf_lan": "${serf_lan}",%{ endif }
@@ -32,6 +34,7 @@
   },
   %{ if bind_addr != "false" }"bind_addr": "${bind_addr}",%{ endif }
   %{ if agent_type == "client" }%{ if enable_local_script_checks }"enable_local_script_checks": true,%{ endif }%{ endif }
+  %{ if enable_central_service_config }"enable_central_service_config": true,%{ endif }
   %{ if connect }
   "connect": {
     "enabled": true

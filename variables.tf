@@ -36,6 +36,12 @@ variable "datacenter" {
   default     = "dc1"
 }
 
+variable "primary_datacenter" {
+  description = "This designates the datacenter which is authoritative for ACL information, intentions and is the root Certificate Authority for Connect. It must be provided to enable ACLs. All servers and datacenters must agree on the primary datacenter. (https://www.consul.io/docs/agent/options.html#primary_datacenter)"
+  type        = string
+  default     = null
+}
+
 variable "data_dir" {
   description = "This flag provides a data directory for the agent to store state. This is required for all agents. The directory should be durable across reboots. (https://www.consul.io/docs/agent/options.html#_data_dir)"
   type        = string
@@ -87,6 +93,12 @@ variable "bootstrap_expect" {
 variable "retry_join" {
   description = "Similar to -join but allows retrying a join if the first attempt fails. This is useful for cases where you know the address will eventually be available. The list can contain IPv4, IPv6, or DNS addresses. (https://www.consul.io/docs/agent/options.html#retry-join)"
   type        = list(string)
+}
+
+variable "retry_join_wan" {
+  description = "Similar to retry-join but allows retrying a wan join if the first attempt fails. This is useful for cases where we know the address will become available eventually. (https://www.consul.io/docs/agent/options.html#_retry_join_wan)"
+  type        = list(string)
+  default     = null
 }
 
 variable "bind_addr" {
@@ -188,6 +200,12 @@ variable "connect" {
 variable "enable_local_script_checks" {
   description = "Like enable_script_checks, but only enable them when they are defined in the local configuration files. Script checks defined in HTTP API registrations will still not be allowed. (https://www.consul.io/docs/agent/options.html#_enable_local_script_checks)"
   type        = bool
+  default     = false
+}
+
+variable "enable_central_service_config" {
+  description = "When set, the Consul agent will look for any centralized service configurations that match a registering service instance. If it finds any, the agent will merge the centralized defaults with the service instance configuration. (https://www.consul.io/docs/agent/options.html#enable_central_service_config)"
+  type        = string
   default     = false
 }
 
