@@ -42,6 +42,10 @@ locals {
     server_port                   = var.server_port
     sidecar_min_port              = var.sidecar_min_port
     sidecar_max_port              = var.sidecar_max_port
+    ca_file                       = var.ca_file == null ? false : var.ca_file
+    cert_file                     = var.cert_file == null ? false : var.cert_file
+    key_file                      = var.key_file == null ? false : var.key_file
+    auto_encrypt                  = var.auto_encrypt
     }
   )
 }
@@ -131,9 +135,9 @@ resource "null_resource" "install" {
 
 resource "null_resource" "configure" {
   depends_on = ["null_resource.install"]
-  # triggers = {
-  #   config_file_changed = local.config_file
-  # }
+  triggers = {
+    template = local.config_file
+  }
 
   connection {
     type        = "ssh"

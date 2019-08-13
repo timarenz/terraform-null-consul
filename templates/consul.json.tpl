@@ -7,8 +7,12 @@
   %{ if bootstrap }"bootstrap_expect": ${bootstrap_expect},%{ endif }
   "performance": {
     "raft_multiplier": 1
-  },
-  %{ endif }
+  },%{ endif }
+  %{ if auto_encrypt }
+  "auto_encrypt": {
+    %{ if agent_type == "server" }"allow_tls": true%{ endif }
+    %{ if agent_type == "client" }"tls": true%{ endif }
+  },%{ endif }
   "retry_join": ${retry_join},
   %{ if retry_join_wan != false }"retry_join_wan": ${retry_join_wan},%{ endif }
   %{ if encryption }"encrypt": "${encryption_key}",%{ endif }
@@ -33,6 +37,9 @@
     "sidecar_max_port": ${sidecar_max_port}
   },
   %{ if bind_addr != "false" }"bind_addr": "${bind_addr}",%{ endif }
+  %{ if ca_file != "false" }"ca_file": ${ca_file},%{ endif }
+  %{ if cert_file != "false" }"cert_file": ${cert_file},%{ endif }
+  %{ if key_file != "false" }"key_file": ${key_file},%{ endif }
   %{ if agent_type == "client" }%{ if enable_local_script_checks }"enable_local_script_checks": true,%{ endif }%{ endif }
   %{ if enable_central_service_config }"enable_central_service_config": true,%{ endif }
   %{ if connect }

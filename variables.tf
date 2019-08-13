@@ -209,20 +209,56 @@ variable "enable_central_service_config" {
   default     = false
 }
 
-# variable "ca_file" {
-#   description = "For future use"
+variable "ca_file" {
+  description = "This provides a file path to a PEM-encoded certificate authority. The certificate authority is used to check the authenticity of client and server connections with the appropriate verify_incoming or verify_outgoing flags. (https://www.consul.io/docs/agent/options.html#ca_file)"
+  type        = string
+  default     = null
+}
+
+variable "cert_file" {
+  description = "This provides a file path to a PEM-encoded certificate. The certificate is provided to clients or servers to verify the agent's authenticity. It must be provided along with key_file. (https://www.consul.io/docs/agent/options.html#cert_file)"
+  type        = string
+  default     = null
+}
+
+variable "key_file" {
+  description = "This provides a the file path to a PEM-encoded private key. The key is used with the certificate to verify the agent's authenticity. This must be provided along with cert_file. (https://www.consul.io/docs/agent/options.html#key_file)"
+  type        = string
+  default     = null
+}
+
+# variable "verify_incoming" {
+#   description = " If set to true, Consul requires that all incoming connections make use of TLS and that the client provides a certificate signed by a Certificate Authority from the ca_file or ca_path. This applies to both server RPC and to the HTTPS API. (https://www.consul.io/docs/agent/options.html#verify_incoming)"
 #   type        = string
-#   default     = null
+#   default     = false
 # }
 
-# variable "cert_file" {
-#   description = "For future use"
+# variable "verify_incoming_rpc" {
+#   description = "If set to true, Consul requires that all incoming RPC connections make use of TLS and that the client provides a certificate signed by a Certificate Authority from the ca_file or ca_path. (https://www.consul.io/docs/agent/options.html#verify_incoming_rpc)"
 #   type        = string
-#   default     = null
+#   default     = false
 # }
 
-# variable "key_file" {
-#   description = "For future use"
+# variable "verify_incoming_https" {
+#   description = "If set to true, Consul requires that all incoming HTTPS connections make use of TLS and that the client provides a certificate signed by a Certificate Authority from the ca_file or ca_path. (https://www.consul.io/docs/agent/options.html#verify_incoming_https)"
 #   type        = string
-#   default     = null
+#   default     = false
 # }
+
+# variable "verify_outgoing" {
+#   description = "If set to true, Consul requires that all outgoing connections from this agent make use of TLS and that the server provides a certificate that is signed by a Certificate Authority from the ca_file or ca_path. (https://www.consul.io/docs/agent/options.html#verify_outgoing)"
+#   type        = string
+#   default     = false
+# }
+
+# variable "verify_server_hostname" {
+#   description = "If set to true, Consul verifies for all outgoing TLS connections that the TLS certificate presented by the servers matches "server.datacenter.domain" hostname. (https://www.consul.io/docs/agent/options.html#verify_server_hostname)"
+#   type        = string
+#   default     = false
+# }
+
+variable "auto_encrypt" {
+  description = "This option enables auto_encrypt on the servers and allows them to automatically distribute certificates from the Connect CA to the clients. If enabled, the server can accept incoming connections from both the built-in CA and the Connect CA, as well as their certificates. (https://www.consul.io/docs/agent/options.html#auto_encrypt)"
+  type        = string
+  default     = false
+}
