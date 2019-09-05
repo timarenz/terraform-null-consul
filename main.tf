@@ -46,6 +46,11 @@ locals {
     cert_file                     = var.cert_file == null ? false : var.cert_file
     key_file                      = var.key_file == null ? false : var.key_file
     auto_encrypt                  = var.auto_encrypt
+    verify_incoming               = var.verify_incoming
+    verify_incoming_rpc           = var.verify_incoming_rpc
+    verify_incoming_https         = var.verify_incoming_https
+    verify_outgoing               = var.verify_outgoing
+    verify_server_hostname        = var.verify_server_hostname
     }
   )
 }
@@ -63,7 +68,7 @@ locals {
 # }
 
 resource "null_resource" "prereqs" {
-  depends_on = ["null_resource.dependencies"]
+  depends_on = [null_resource.dependencies]
 
   connection {
     type        = "ssh"
@@ -79,7 +84,7 @@ resource "null_resource" "prereqs" {
 
 resource "null_resource" "download_binary" {
   count      = var.consul_binary == null ? 1 : 0
-  depends_on = ["null_resource.prereqs"]
+  depends_on = [null_resource.prereqs]
 
   connection {
     type        = "ssh"
@@ -103,7 +108,7 @@ resource "null_resource" "download_binary" {
 
 resource "null_resource" "upload_binary" {
   count      = var.consul_binary == null ? 0 : 1
-  depends_on = ["null_resource.prereqs"]
+  depends_on = [null_resource.prereqs]
 
   connection {
     type        = "ssh"
@@ -119,7 +124,7 @@ resource "null_resource" "upload_binary" {
 }
 
 resource "null_resource" "install" {
-  depends_on = ["null_resource.download_binary", "null_resource.upload_binary"]
+  depends_on = [null_resource.download_binary, null_resource.upload_binary]
 
   connection {
     type        = "ssh"
@@ -133,8 +138,93 @@ resource "null_resource" "install" {
   }
 }
 
+resource "null_resource" "upload_ca_file" {
+  count      = var.ca_file == null ? 0 : 1
+  depends_on = [null_resource.install]
+
+  connection {
+    type        = "ssh"
+    host        = var.host
+    user        = var.username
+    private_key = var.ssh_private_key
+  }
+
+  provisioner "file" {
+    source      = var.ca_file
+    destination = "ca.pem"
+  }
+}
+
+resource "null_resource" "upload_key_file" {
+  count      = var.key_file == null ? 0 : 1
+  depends_on = [null_resource.install]
+
+  connection {
+    type        = "ssh"
+    host        = var.host
+    user        = var.username
+    private_key = var.ssh_private_key
+  }
+
+  provisioner "file" {
+    source      = var.key_file
+    destination = "server.key"
+  }
+}
+
+resource "null_resource" "upload_cert_file" {
+  count      = var.cert_file == null ? 0 : 1
+  depends_on = [null_resource.install]
+
+  connection {
+    type        = "ssh"
+    host        = var.host
+    user        = var.username
+    private_key = var.ssh_private_key
+  }
+
+  provisioner "file" {
+    source      = var.cert_file
+    destination = "server.pem"
+  }
+}
+
+resource "null_resource" "upload_cli_key_file" {
+  count      = var.cli_key_file == null ? 0 : 1
+  depends_on = [null_resource.install]
+
+  connection {
+    type        = "ssh"
+    host        = var.host
+    user        = var.username
+    private_key = var.ssh_private_key
+  }
+
+  provisioner "file" {
+    source      = var.cli_key_file
+    destination = "cli.key"
+  }
+}
+
+resource "null_resource" "upload_cli_cert_file" {
+  count      = var.cli_cert_file == null ? 0 : 1
+  depends_on = [null_resource.install]
+
+  connection {
+    type        = "ssh"
+    host        = var.host
+    user        = var.username
+    private_key = var.ssh_private_key
+  }
+
+  provisioner "file" {
+    source      = var.cli_cert_file
+    destination = "cli.pem"
+  }
+}
+
 resource "null_resource" "configure" {
-  depends_on = ["null_resource.install"]
+  depends_on = [null_resource.install, null_resource.upload_ca_file, null_resource.upload_key_file, null_resource.upload_cert_file]
   triggers = {
     template = local.config_file
   }

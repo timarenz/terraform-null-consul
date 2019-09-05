@@ -23,7 +23,10 @@
   %{ if advertise_addr_wan != "false" }"advertise_addr_wan": "${advertise_addr_wan}",%{ endif }
   %{ if advertise_addr != "false" }"advertise_addr": "${advertise_addr}",%{ endif }
   "addresses": {
-    "http": "%{ if agent_type == "server" }0.0.0.0%{ else }127.0.0.1%{ endif }"
+    "dns": "%{ if agent_type == "server" }0.0.0.0%{ else }127.0.0.1%{ endif }",
+    "http": "%{ if agent_type == "server" }0.0.0.0%{ else }127.0.0.1%{ endif }",
+    "https": "%{ if agent_type == "server" }0.0.0.0%{ else }127.0.0.1%{ endif }",
+    "grpc": "%{ if agent_type == "server" }0.0.0.0%{ else }127.0.0.1%{ endif }"
   },
   "ports": {
     "dns": ${dns_port},
@@ -37,9 +40,14 @@
     "sidecar_max_port": ${sidecar_max_port}
   },
   %{ if bind_addr != "false" }"bind_addr": "${bind_addr}",%{ endif }
-  %{ if ca_file != "false" }"ca_file": ${ca_file},%{ endif }
-  %{ if cert_file != "false" }"cert_file": ${cert_file},%{ endif }
-  %{ if key_file != "false" }"key_file": ${key_file},%{ endif }
+  %{ if ca_file != "false" }"ca_file": "/etc/consul.d/ca.pem",%{ endif }
+  %{ if cert_file != "false" }"cert_file": "/etc/consul.d/server.pem",%{ endif }
+  %{ if key_file != "false" }"key_file": "/etc/consul.d/server.key",%{ endif }
+  %{ if verify_incoming }"verify_incoming": true,%{ endif }
+  %{ if verify_incoming_rpc }"verify_incoming_rpc": true,%{ endif }
+  %{ if verify_incoming_https }"verify_incoming_https": true,%{ endif }
+  %{ if verify_outgoing }"verify_outgoing": true,%{ endif }
+  %{ if verify_server_hostname }"verify_server_hostname": true,%{ endif }
   %{ if agent_type == "client" }%{ if enable_local_script_checks }"enable_local_script_checks": true,%{ endif }%{ endif }
   %{ if enable_central_service_config }"enable_central_service_config": true,%{ endif }
   %{ if connect }
