@@ -9,11 +9,6 @@ output "id" {
   value       = null_resource.complete.id
 }
 
-output "consul_config_json" {
-  description = ""
-  value       = local.config_file_json
-}
-
-output "consul_config_hcl" {
-  value = local.config_file_hcl
+output "consul_config" {
+  value = local.config_file
 }

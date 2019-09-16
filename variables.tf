@@ -4,28 +4,19 @@ variable "dependency" {
   default     = null
 }
 
-variable "render_only" {
-  description = "Allows this module to be used only for renedering the config file but not installing. If this is false the variables host, username and ssh_private_key need to be set."
-  type        = bool
-  default     = false
-}
-
 variable "host" {
   description = "IP address, hostname or dns name of the machine that should become a Consul agent"
   type        = string
-  default     = null
 }
 
 variable "username" {
   description = "Username used for SSH connection"
   type        = string
-  default     = null
 }
 
 variable "ssh_private_key" {
   description = "SSH private key used for SSH connection"
   type        = string
-  default     = null
 }
 
 variable "consul_binary" {
