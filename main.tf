@@ -254,7 +254,7 @@ resource "null_resource" "configure" {
     null_resource.upload_cli_cert_file
   ]
   triggers = {
-    template = local.config_file_json
+    template = local.config_file
     install  = null_resource.install.id
   }
 
