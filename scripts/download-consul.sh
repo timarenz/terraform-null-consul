@@ -6,7 +6,7 @@ GPG_KEY=91A6E7F85D05C65630BEF18951852D87348FFC4C
 KEY_SERVER=hkp://keyserver.ubuntu.com:80
 CHECKPOINT_URL="https://checkpoint-api.hashicorp.com/v1/check"
 
-if [ -z "$CONSUL_VERSION" ]; then
+if [ -z "${CONSUL_VERSION}" ]; then
     CONSUL_VERSION=$(curl -s "${CHECKPOINT_URL}"/consul | jq .current_version | tr -d '"')
 fi
 

@@ -1,21 +1,31 @@
-variable "dependencies" {
-  type    = list(string)
-  default = null
+variable "dependency" {
+  description = "Allows this module to depend and therefore wait on other resources"
+  type        = string
+  default     = null
+}
+
+variable "render_only" {
+  description = "Allows this module to be used only for renedering the config file but not installing. If this is false the variables host, username and ssh_private_key need to be set."
+  type        = bool
+  default     = false
 }
 
 variable "host" {
   description = "IP address, hostname or dns name of the machine that should become a Consul agent"
   type        = string
+  default     = null
 }
 
 variable "username" {
   description = "Username used for SSH connection"
   type        = string
+  default     = null
 }
 
 variable "ssh_private_key" {
   description = "SSH private key used for SSH connection"
   type        = string
+  default     = null
 }
 
 variable "consul_binary" {
@@ -30,30 +40,6 @@ variable "consul_version" {
   default     = null
 }
 
-variable "datacenter" {
-  description = "This flag controls the datacenter in which the agent is running. If not provided, it defaults to 'dc1'. Consul has first-class support for multiple datacenters, but it relies on proper configuration. Nodes in the same datacenter should be on a single LAN. (https://www.consul.io/docs/agent/options.html#_datacenter)"
-  type        = string
-  default     = "dc1"
-}
-
-variable "primary_datacenter" {
-  description = "This designates the datacenter which is authoritative for ACL information, intentions and is the root Certificate Authority for Connect. It must be provided to enable ACLs. All servers and datacenters must agree on the primary datacenter. (https://www.consul.io/docs/agent/options.html#primary_datacenter)"
-  type        = string
-  default     = null
-}
-
-# variable "service_account" {
-#   description = "Name of the user the Consul agent should run as. This account be created during installation."
-#   type        = string
-#   default     = "consul"
-# }
-
-# variable "config_dir" {
-#   description = "This flag provides a directory to store the agent service configuration. This is required for all agents. The directory should be durable across reboots."
-#   type        = string
-#   default     = "/etc/consul.d"
-# }
-
 variable "data_dir" {
   description = "This flag provides a data directory for the agent to store state. This is required for all agents. The directory should be durable across reboots. (https://www.consul.io/docs/agent/options.html#_data_dir)"
   type        = string
@@ -64,6 +50,18 @@ variable "agent_type" {
   description = "This flag is used to control if an agent is in server or client mode. Supported values: client or server. (https://www.consul.io/docs/agent/options.html#_server)"
   type        = string
   default     = "server"
+}
+
+variable "datacenter" {
+  description = "This flag controls the datacenter in which the agent is running. If not provided, it defaults to 'dc1'. Consul has first-class support for multiple datacenters, but it relies on proper configuration. Nodes in the same datacenter should be on a single LAN. (https://www.consul.io/docs/agent/options.html#_datacenter)"
+  type        = string
+  default     = "dc1"
+}
+
+variable "primary_datacenter" {
+  description = "This designates the datacenter which is authoritative for ACL information, intentions and is the root Certificate Authority for Connect. It must be provided to enable ACLs. All servers and datacenters must agree on the primary datacenter. (https://www.consul.io/docs/agent/options.html#primary_datacenter)"
+  type        = string
+  default     = null
 }
 
 variable "log_level" {
