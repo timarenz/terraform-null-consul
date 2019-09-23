@@ -10,5 +10,6 @@ output "id" {
 }
 
 output "consul_config" {
-  value = local.config_file
+  description = "Consul configuration in HCL format"
+  value       = local.config_file
 }

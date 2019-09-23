@@ -5,7 +5,7 @@ resource "null_resource" "dependency" {
 }
 
 resource "random_id" "encryption_key" {
-  byte_length = 16
+  byte_length = 32
 }
 
 locals {
@@ -73,6 +73,9 @@ resource "null_resource" "prereqs" {
 resource "null_resource" "download_binary" {
   count      = var.consul_binary == null ? 1 : 0
   depends_on = [null_resource.dependency, null_resource.prereqs]
+  triggers = {
+    version = var.consul_version
+  }
 
   connection {
     type        = "ssh"
