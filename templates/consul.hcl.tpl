@@ -12,6 +12,12 @@ auto_encrypt {
   %{ if agent_type == "server" }allow_tls = true%{ endif }
   %{ if agent_type == "client" }tls = true%{ endif }
 }%{ endif }
+%{ if acl }
+acl {
+  enabled = true
+  default_policy = "${default_policy}"
+  enable_token_persistence = ${enable_token_persistence}
+}%{ endif }
 retry_join = ${retry_join}
 %{ if retry_join_wan != false }retry_join_wan = ${retry_join_wan}%{ endif }
 %{ if encryption }encrypt = "${encryption_key}"%{ endif }
@@ -50,8 +56,18 @@ ports {
 %{ if agent_type == "client" }%{ if enable_local_script_checks }enable_local_script_checks = true%{ endif }%{ endif }
 %{ if enable_central_service_config }enable_central_service_config = true%{ endif }
 %{ if connect }
-connect = {
+connect {
   enabled = true
 }
 %{ endif }
+node_meta {
+%{ for k, v in node_meta }
+  ${k} = "${v}"
+%{ endfor }
+}
+autopilot {
+%{ for k, v in autopilot }
+  ${k} = "${v}"
+%{ endfor }
+}
 log_level = "${log_level}"

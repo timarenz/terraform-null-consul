@@ -5,11 +5,12 @@ resource "null_resource" "dependency" {
 }
 
 resource "random_id" "encryption_key" {
+  count       = var.encryption_key == null ? 1 : 0
   byte_length = 32
 }
 
 locals {
-  encryption_key = var.encryption ? var.encryption_key == null ? random_id.encryption_key.b64_std : var.encryption_key : null
+  encryption_key = var.encryption ? var.encryption_key == null ? random_id.encryption_key[0].b64_std : var.encryption_key : null
   consul_version = var.consul_version == null ? "" : var.consul_version
   config_file = templatefile("${path.module}/templates/consul.hcl.tpl", {
     datacenter                    = var.datacenter
@@ -51,8 +52,14 @@ locals {
     verify_incoming_https         = var.verify_incoming_https
     verify_outgoing               = var.verify_outgoing
     verify_server_hostname        = var.verify_server_hostname
+    acl                           = var.acl
+    default_policy                = var.default_policy
+    enable_token_persistence      = var.enable_token_persistence
+    node_meta                     = var.node_meta == null ? {} : var.node_meta
+    autopilot                     = var.autopilot == null ? {} : var.autopilot
     }
   )
+  binary_trigger = element(coalescelist(null_resource.download_binary[*].id, null_resource.upload_binary[*].id, [0]), 0)
 }
 
 resource "null_resource" "prereqs" {
@@ -118,9 +125,9 @@ resource "null_resource" "upload_binary" {
 }
 
 resource "null_resource" "install" {
-  depends_on = [null_resource.dependency, null_resource.download_binary, null_resource.upload_binary]
+  depends_on = [null_resource.dependency, null_resource.upload_binary, null_resource.download_binary]
   triggers = {
-    upload = null_resource.upload_binary[0].id
+    binary = local.binary_trigger
   }
 
   connection {
@@ -156,6 +163,14 @@ resource "null_resource" "install_service" {
       "CONSUL_DATA_DIR=${var.data_dir} ./install-consul-service.sh"
     ]
   }
+
+  # provisioner "remote-exec" {
+  #   when = "destroy"
+  #   inline = [
+  #     "sudo systemctl stop consul.service",
+  #     "sudo userdel consul"
+  #   ]
+  # }
 }
 
 resource "null_resource" "upload_ca_file" {
@@ -170,7 +185,7 @@ resource "null_resource" "upload_ca_file" {
   }
 
   provisioner "file" {
-    source      = var.ca_file
+    content     = var.ca_file
     destination = "ca.pem"
   }
 }
@@ -187,7 +202,7 @@ resource "null_resource" "upload_key_file" {
   }
 
   provisioner "file" {
-    source      = var.key_file
+    content     = var.key_file
     destination = "server.key"
   }
 }
@@ -204,7 +219,7 @@ resource "null_resource" "upload_cert_file" {
   }
 
   provisioner "file" {
-    source      = var.cert_file
+    content     = var.cert_file
     destination = "server.pem"
   }
 }
@@ -221,7 +236,7 @@ resource "null_resource" "upload_cli_key_file" {
   }
 
   provisioner "file" {
-    source      = var.cli_key_file
+    content     = var.cli_key_file
     destination = "cli.key"
   }
 }
@@ -238,7 +253,7 @@ resource "null_resource" "upload_cli_cert_file" {
   }
 
   provisioner "file" {
-    source      = var.cli_cert_file
+    content     = var.cli_cert_file
     destination = "cli.pem"
   }
 }
@@ -294,6 +309,17 @@ resource "null_resource" "complete" {
   ]
 
   triggers = {
-    always = timestamp()
+    prereqs         = null_resource.prereqs.id
+    binary          = local.binary_trigger,
+    install         = null_resource.install.id,
+    install_service = null_resource.install_service.id,
+    # certificates = sha256(join("", [
+    #   null_resource.upload_ca_file[0].id,
+    #   null_resource.upload_key_file[0].id,
+    #   null_resource.upload_cert_file[0].id,
+    #   null_resource.upload_cli_key_file[0].id,
+    #   null_resource.upload_cli_cert_file[0].id
+    # ]))
+    configure = null_resource.configure.id
   }
 }

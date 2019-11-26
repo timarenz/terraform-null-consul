@@ -9,7 +9,7 @@ output "id" {
   value       = null_resource.complete.id
 }
 
-output "consul_config" {
+output "config" {
   description = "Consul configuration in HCL format"
   value       = local.config_file
 }

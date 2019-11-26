@@ -275,3 +275,37 @@ variable "auto_encrypt" {
   type        = string
   default     = false
 }
+
+variable "acl" {
+  description = "Enables ACLs. (https://www.consul.io/docs/agent/options.html#acl_enabled)"
+  type        = bool
+  default     = false
+}
+
+variable "default_policy" {
+  description = "Either \"allow\" or \"deny\"; defaults to \"allow\" but this will be changed in a future major release. The default policy controls the behavior of a token when there is no matching rule. (https://www.consul.io/docs/agent/options.html#acl_default_policy)"
+  type        = string
+  default     = "deny"
+}
+
+variable "enable_token_persistence" {
+  description = "Either true or false. When true tokens set using the API will be persisted to disk and reloaded when an agent restarts. (https://www.consul.io/docs/agent/options.html#acl_enable_token_persistence)"
+  type        = bool
+  default     = true
+}
+
+variable "node_meta" {
+  description = "Available in Consul 0.7.3 and later, This object allows associating arbitrary metadata key/value pairs with the local node, which can then be used for filtering results from certain catalog endpoints. (https://www.consul.io/docs/agent/options.html#node_meta)"
+  type        = map
+  default     = null
+}
+
+variable "autopilot" {
+  description = "Added in Consul 0.8, this object allows a number of sub-keys to be set which can configure operator-friendly settings for Consul servers. When these keys are provided as configuration, they will only be respected on bootstrapping. If they are not provided, the defaults will be used. (https://www.consul.io/docs/agent/options.html#autopilot)"
+  type        = map
+  default     = null
+  # default = {
+  #   redundancy_zone_tag = "someredundancytag"
+  #   upgrade_version_tag "someversiontag"
+  # }
+}
