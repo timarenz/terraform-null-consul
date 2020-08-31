@@ -211,31 +211,31 @@ variable "enable_central_service_config" {
 }
 
 variable "ca_file" {
-  description = "This provides a file path to a PEM-encoded certificate authority. The certificate authority is used to check the authenticity of client and server connections with the appropriate verify_incoming or verify_outgoing flags. (https://www.consul.io/docs/agent/options.html#ca_file)"
+  description = "This provides a PEM-encoded certificate authority. The certificate authority is used to check the authenticity of client and server connections with the appropriate verify_incoming or verify_outgoing flags. (https://www.consul.io/docs/agent/options.html#ca_file)"
   type        = string
   default     = null
 }
 
 variable "cert_file" {
-  description = "This provides a file path to a PEM-encoded certificate. The certificate is provided to clients or servers to verify the agent's authenticity. It must be provided along with key_file. (https://www.consul.io/docs/agent/options.html#cert_file)"
+  description = "This provides a PEM-encoded certificate. The certificate is provided to clients or servers to verify the agent's authenticity. It must be provided along with key_file. (https://www.consul.io/docs/agent/options.html#cert_file)"
   type        = string
   default     = null
 }
 
 variable "key_file" {
-  description = "This provides a the file path to a PEM-encoded private key. The key is used with the certificate to verify the agent's authenticity. This must be provided along with cert_file. (https://www.consul.io/docs/agent/options.html#key_file)"
+  description = "This provides a PEM-encoded private key. The key is used with the certificate to verify the agent's authenticity. This must be provided along with cert_file. (https://www.consul.io/docs/agent/options.html#key_file)"
   type        = string
   default     = null
 }
 
 variable "cli_cert_file" {
-  description = "This provides a file path to a PEM-encoded client certificate. This file is copied to the consul configuration directory for later use with the CLI on the server."
+  description = "This provides a PEM-encoded client certificate. This file is copied to the consul configuration directory for later use with the CLI on the server."
   type        = string
   default     = null
 }
 
 variable "cli_key_file" {
-  description = "This provides a the file path to a PEM-encoded private key. This file is copied to the consul configuration directory for later use with the CLI on the server."
+  description = "This provides a PEM-encoded private key. This file is copied to the consul configuration directory for later use with the CLI on the server."
   type        = string
   default     = null
 }
@@ -308,4 +308,30 @@ variable "autopilot" {
   #   redundancy_zone_tag = "someredundancytag"
   #   upgrade_version_tag "someversiontag"
   # }
+}
+
+variable "segment" {
+  description = " (Enterprise-only) This flag is used to set the name of the network segment the agent belongs to. An agent can only join and communicate with other agents within its network segment. By default, this is an empty string, which is the default network segment. (https://www.consul.io/docs/agent/options.html#_segment)"
+  type        = string
+  default     = null
+}
+
+variable "segments" {
+  description = "(Enterprise-only) This is a list of nested objects that allows setting the bind/advertise information for network segments. This can only be set on servers. (https://www.consul.io/docs/agent/options.html#segments)"
+  type        = list
+  default     = null
+  # default = [
+  #   {
+  #     "name": "alpha",
+  #     "bind": "{{GetPrivateIP}}",
+  #     "advertise": "{{GetPrivateIP}}",
+  #     "port": 8303
+  #   },
+  #   {
+  #     "name": "beta",
+  #     "bind": "{{GetPrivateIP}}",
+  #     "advertise": "{{GetPrivateIP}}",
+  #     "port": 8304
+  #   }
+  # ]
 }

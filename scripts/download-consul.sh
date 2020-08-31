@@ -7,7 +7,7 @@ KEY_SERVER=hkp://keyserver.ubuntu.com:80
 CHECKPOINT_URL="https://checkpoint-api.hashicorp.com/v1/check"
 
 if [ -z "${CONSUL_VERSION}" ]; then
-    CONSUL_VERSION=$(curl -s "${CHECKPOINT_URL}"/consul | jq .current_version | tr -d '"')
+    CONSUL_VERSION=$(curl -s "${CHECKPOINT_URL}"/consul | jq -r .current_version )
 fi
 
 echo "Consul version: ${CONSUL_VERSION}"

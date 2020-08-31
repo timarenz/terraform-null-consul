@@ -19,6 +19,7 @@ set -e
 #   sudo systemctl stop consul.service
 # fi
 
+pwd
 sudo chmod 755 consul
 sudo chown root:root consul
 sudo mv consul /usr/local/bin/
