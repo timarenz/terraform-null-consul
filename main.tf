@@ -66,11 +66,13 @@ locals {
 
 resource "null_resource" "temp_folder" {
   triggers = {
-    template  = local.config_file
-    install   = null_resource.install.id
-    cert_file = var.cert_file
-    key_file  = var.key_file
-    ca_file   = var.ca_file
+    template     = local.config_file
+    cert_file    = var.cert_file
+    key_file     = var.key_file
+    ca_file      = var.ca_file
+    version      = var.consul_version
+    binary       = var.consul_binary
+    local_binary = local.binary_trigger
   }
 
   connection {
@@ -313,6 +315,7 @@ resource "null_resource" "configure" {
     null_resource.upload_cli_key_file,
     null_resource.upload_cli_cert_file
   ]
+
   triggers = {
     template  = local.config_file
     install   = null_resource.install.id
