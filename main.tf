@@ -1,7 +1,7 @@
-resource "random_id" "encryption_key" {
-  count       = var.encryption_key == null ? 1 : 0
-  byte_length = 32
-}
+# resource "random_id" "encryption_key" {
+#   count       = var.encryption_key == null ? 1 : 0
+#   byte_length = 32
+# }
 
 resource "random_id" "random" {
   byte_length = 3
