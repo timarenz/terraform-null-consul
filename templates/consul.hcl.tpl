@@ -17,10 +17,10 @@ acl {
   enabled = true
   default_policy = "${default_policy}"
   enable_token_persistence = ${enable_token_persistence}
-}%{ endif }
-%{ if agent_token != "" ~}
-tokens {
-  agent = "${agent_token}"
+  %{ if agent_token != "" ~}
+  tokens {
+    agent = "${agent_token}"
+  }%{ endif }
 }%{ endif }
 retry_join = ${retry_join}
 %{ if retry_join_wan != "false" ~}retry_join_wan = ${retry_join_wan}%{ endif }
