@@ -228,18 +228,6 @@ variable "key_file" {
   default     = null
 }
 
-variable "cli_cert_file" {
-  description = "This provides a PEM-encoded client certificate. This file is copied to the consul configuration directory for later use with the CLI on the server."
-  type        = string
-  default     = null
-}
-
-variable "cli_key_file" {
-  description = "This provides a PEM-encoded private key. This file is copied to the consul configuration directory for later use with the CLI on the server."
-  type        = string
-  default     = null
-}
-
 variable "verify_incoming" {
   description = " If set to true, Consul requires that all incoming connections make use of TLS and that the client provides a certificate signed by a Certificate Authority from the ca_file or ca_path. This applies to both server RPC and to the HTTPS API. (https://www.consul.io/docs/agent/options.html#verify_incoming)"
   type        = string

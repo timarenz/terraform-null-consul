@@ -64,31 +64,6 @@ locals {
   random_temp_folder = "/tmp/consul-${random_id.random.dec}"
 }
 
-resource "null_resource" "temp_folder" {
-  triggers = {
-    template     = local.config_file
-    cert_file    = var.cert_file
-    key_file     = var.key_file
-    ca_file      = var.ca_file
-    version      = var.consul_version
-    binary       = var.consul_binary
-    local_binary = local.binary_trigger
-  }
-
-  connection {
-    type        = "ssh"
-    host        = var.host
-    user        = var.username
-    private_key = var.ssh_private_key
-  }
-
-  provisioner "remote-exec" {
-    inline = [
-      "mkdir -p ${local.random_temp_folder}"
-    ]
-  }
-}
-
 resource "null_resource" "prereqs" {
   depends_on = [null_resource.temp_folder]
   connection {
@@ -115,6 +90,12 @@ resource "null_resource" "download_binary" {
     host        = var.host
     user        = var.username
     private_key = var.ssh_private_key
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "mkdir -p ${local.random_temp_folder}"
+    ]
   }
 
   provisioner "file" {
@@ -145,9 +126,15 @@ resource "null_resource" "upload_binary" {
     private_key = var.ssh_private_key
   }
 
+  provisioner "remote-exec" {
+    inline = [
+      "mkdir -p ${local.random_temp_folder}"
+    ]
+  }
+
   provisioner "file" {
     source      = var.consul_binary
-    destination = "consul"
+    destination = "${local.random_temp_folder}/consul"
   }
 }
 
@@ -162,6 +149,12 @@ resource "null_resource" "install" {
     host        = var.host
     user        = var.username
     private_key = var.ssh_private_key
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "mkdir -p ${local.random_temp_folder}"
+    ]
   }
 
   provisioner "file" {
@@ -186,6 +179,12 @@ resource "null_resource" "install_service" {
     host        = var.host
     user        = var.username
     private_key = var.ssh_private_key
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "mkdir -p ${local.random_temp_folder}"
+    ]
   }
 
   provisioner "file" {
@@ -221,8 +220,14 @@ resource "null_resource" "upload_ca_file" {
     private_key = var.ssh_private_key
   }
 
+  provisioner "remote-exec" {
+    inline = [
+      "mkdir -p ${local.random_temp_folder}"
+    ]
+  }
+
   provisioner "file" {
-    content     = var.ca_file == null ? "\r" : var.ca_file
+    content     = var.ca_file == null ? local.file_placeholder : var.ca_file
     destination = "${local.random_temp_folder}/ca.pem"
   }
 }
@@ -234,12 +239,17 @@ resource "null_resource" "upload_key_file" {
     key_file = var.key_file
   }
 
-
   connection {
     type        = "ssh"
     host        = var.host
     user        = var.username
     private_key = var.ssh_private_key
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "mkdir -p ${local.random_temp_folder}"
+    ]
   }
 
   provisioner "file" {
@@ -262,43 +272,15 @@ resource "null_resource" "upload_cert_file" {
     private_key = var.ssh_private_key
   }
 
+  provisioner "remote-exec" {
+    inline = [
+      "mkdir -p ${local.random_temp_folder}"
+    ]
+  }
+
   provisioner "file" {
     content     = var.cert_file == null ? local.file_placeholder : var.cert_file
     destination = "${local.random_temp_folder}/server.pem"
-  }
-}
-
-resource "null_resource" "upload_cli_key_file" {
-  # count      = var.cli_key_file == null ? 0 : 1
-  depends_on = [null_resource.install_service]
-
-  connection {
-    type        = "ssh"
-    host        = var.host
-    user        = var.username
-    private_key = var.ssh_private_key
-  }
-
-  provisioner "file" {
-    content     = var.cli_key_file == null ? local.file_placeholder : var.key_file
-    destination = "${local.random_temp_folder}/cli.key"
-  }
-}
-
-resource "null_resource" "upload_cli_cert_file" {
-  # count      = var.cli_cert_file == null ? 0 : 1
-  depends_on = [null_resource.install_service]
-
-  connection {
-    type        = "ssh"
-    host        = var.host
-    user        = var.username
-    private_key = var.ssh_private_key
-  }
-
-  provisioner "file" {
-    content     = var.cli_cert_file == null ? local.file_placeholder : var.cli_cert_file
-    destination = "${local.random_temp_folder}/cli.pem"
   }
 }
 
@@ -312,8 +294,6 @@ resource "null_resource" "configure" {
     null_resource.upload_ca_file,
     null_resource.upload_key_file,
     null_resource.upload_cert_file,
-    null_resource.upload_cli_key_file,
-    null_resource.upload_cli_cert_file
   ]
 
   triggers = {
@@ -367,8 +347,6 @@ resource "null_resource" "complete" {
     null_resource.upload_ca_file,
     null_resource.upload_key_file,
     null_resource.upload_cert_file,
-    null_resource.upload_cli_key_file,
-    null_resource.upload_cli_cert_file,
     null_resource.configure
   ]
 
