@@ -65,7 +65,6 @@ locals {
 }
 
 resource "null_resource" "prereqs" {
-  depends_on = [null_resource.temp_folder]
   connection {
     type        = "ssh"
     host        = var.host
