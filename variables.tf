@@ -61,16 +61,16 @@ variable "log_level" {
   default     = "info"
 }
 
-variable "encryption" {
-  description = "Specifies the secret key to use for encryption of Consul network traffic. This key must be 16-bytes that are Base64-encoded. (https://www.consul.io/docs/agent/options.html#_encrypt)"
-  type        = bool
-  default     = false
-}
+# variable "encryption" {
+#   description = "Specifies the secret key to use for encryption of Consul network traffic. This key must be 16-bytes that are Base64-encoded. (https://www.consul.io/docs/agent/options.html#_encrypt)"
+#   type        = bool
+#   default     = false
+# }
 
 variable "encryption_key" {
   description = "Allows to specify an existing gossip key. If not specified one will be generated."
   type        = string
-  default     = null
+  default     = ""
 }
 
 variable "ui" {

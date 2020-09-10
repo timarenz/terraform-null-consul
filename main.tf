@@ -8,22 +8,22 @@ resource "random_id" "random" {
 }
 
 locals {
-  encryption_key = var.encryption ? var.encryption_key == null ? random_id.encryption_key[0].b64_std : var.encryption_key : null
+  # encryption_key = var.encryption ? var.encryption_key == null ? random_id.encryption_key[0].b64_std : var.encryption_key : null
   consul_version = var.consul_version == null ? "" : var.consul_version
   config_file = templatefile("${path.module}/templates/consul.hcl.tpl", {
-    datacenter                    = var.datacenter
-    primary_datacenter            = var.primary_datacenter == null ? false : var.primary_datacenter
-    agent_type                    = var.agent_type
-    ui                            = var.ui
-    data_dir                      = var.data_dir
-    connect                       = var.connect
-    bootstrap                     = var.bootstrap
-    bootstrap_expect              = var.bootstrap_expect
-    bind_addr                     = var.bind_addr == null ? false : var.bind_addr
-    encryption_key                = local.encryption_key
-    retry_join                    = jsonencode(var.retry_join)
-    retry_join_wan                = var.retry_join_wan == null ? false : jsonencode(var.retry_join_wan)
-    encryption                    = var.encryption
+    datacenter         = var.datacenter
+    primary_datacenter = var.primary_datacenter == null ? false : var.primary_datacenter
+    agent_type         = var.agent_type
+    ui                 = var.ui
+    data_dir           = var.data_dir
+    connect            = var.connect
+    bootstrap          = var.bootstrap
+    bootstrap_expect   = var.bootstrap_expect
+    bind_addr          = var.bind_addr == null ? false : var.bind_addr
+    encryption_key     = var.encryption_key
+    retry_join         = jsonencode(var.retry_join)
+    retry_join_wan     = var.retry_join_wan == null ? false : jsonencode(var.retry_join_wan)
+    # encryption                    = var.encryption
     enable_local_script_checks    = var.enable_local_script_checks
     enable_central_service_config = var.enable_central_service_config
     serf_lan                      = var.serf_lan == null ? false : var.serf_lan

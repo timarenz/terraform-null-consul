@@ -20,7 +20,7 @@ acl {
 }%{ endif }
 retry_join = ${retry_join}
 %{ if retry_join_wan != "false" ~}retry_join_wan = ${retry_join_wan}%{ endif }
-%{ if encryption ~}encrypt = "${encryption_key}"%{ endif }
+%{ if encryption_key != "" ~}encrypt = "${encryption_key}"%{ endif }
 ui = ${ui}
 %{ if serf_lan != "false" ~}serf_lan = "${serf_lan}"%{ endif }
 %{ if serf_wan != "false" ~}serf_wan = "${serf_wan}"%{ endif }
