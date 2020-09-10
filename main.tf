@@ -286,7 +286,6 @@ resource "null_resource" "upload_cert_file" {
 
 resource "null_resource" "configure" {
   depends_on = [
-    null_resource.temp_folder,
     null_resource.prereqs,
     null_resource.download_binary,
     null_resource.upload_binary,
@@ -338,7 +337,6 @@ resource "null_resource" "configure" {
 
 resource "null_resource" "complete" {
   depends_on = [
-    null_resource.temp_folder,
     null_resource.prereqs,
     null_resource.download_binary,
     null_resource.upload_binary,
