@@ -57,6 +57,7 @@ locals {
     autopilot                     = var.autopilot == null ? {} : var.autopilot
     segments                      = var.segments == null ? [] : var.segments
     segment                       = var.segment == null ? false : var.segment
+    agent_token                   = var.agent_token
     }
   )
   binary_trigger     = element(coalescelist(null_resource.download_binary[*].id, null_resource.upload_binary[*].id, [0]), 0)

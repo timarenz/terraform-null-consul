@@ -323,3 +323,9 @@ variable "segments" {
   #   }
   # ]
 }
+
+variable "agent_token" {
+  description = "Used for clients and servers to perform internal operations. If this isn't specified, then the default will be used. (https://www.consul.io/docs/agent/options#acl_tokens_agent)"
+  type        = string
+  default     = ""
+}

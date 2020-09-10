@@ -18,6 +18,10 @@ acl {
   default_policy = "${default_policy}"
   enable_token_persistence = ${enable_token_persistence}
 }%{ endif }
+%{ if agent_token != "" ~}
+tokens {
+  agent = "${agent_token}"
+}%{ endif }
 retry_join = ${retry_join}
 %{ if retry_join_wan != "false" ~}retry_join_wan = ${retry_join_wan}%{ endif }
 %{ if encryption_key != "" ~}encrypt = "${encryption_key}"%{ endif }
