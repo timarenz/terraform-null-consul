@@ -310,6 +310,12 @@ resource "null_resource" "configure" {
     private_key = var.ssh_private_key
   }
 
+  provisioner "remote-exec" {
+    inline = [
+      "mkdir -p ${local.random_temp_folder}"
+    ]
+  }
+
   provisioner "file" {
     content     = local.config_file
     destination = "${local.random_temp_folder}/consul.hcl"
