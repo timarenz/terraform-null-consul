@@ -65,6 +65,14 @@ locals {
 }
 
 resource "null_resource" "temp_folder" {
+  triggers = {
+    template  = local.config_file
+    install   = null_resource.install.id
+    cert_file = var.cert_file
+    key_file  = var.key_file
+    ca_file   = var.ca_file
+  }
+
   connection {
     type        = "ssh"
     host        = var.host
