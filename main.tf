@@ -17,12 +17,12 @@ locals {
     ui                 = var.ui
     data_dir           = var.data_dir
     connect            = var.connect
-    bootstrap          = var.bootstrap
-    bootstrap_expect   = var.bootstrap_expect
-    bind_addr          = var.bind_addr == null ? false : var.bind_addr
-    encryption_key     = var.encryption_key
-    retry_join         = jsonencode(var.retry_join)
-    retry_join_wan     = var.retry_join_wan == null ? false : jsonencode(var.retry_join_wan)
+    # bootstrap          = var.bootstrap
+    bootstrap_expect = var.bootstrap_expect
+    bind_addr        = var.bind_addr == null ? false : var.bind_addr
+    encryption_key   = var.encryption_key
+    retry_join       = jsonencode(var.retry_join)
+    retry_join_wan   = var.retry_join_wan == null ? false : jsonencode(var.retry_join_wan)
     # encryption                    = var.encryption
     enable_local_script_checks    = var.enable_local_script_checks
     enable_central_service_config = var.enable_central_service_config
@@ -58,6 +58,7 @@ locals {
     segments                      = var.segments == null ? [] : var.segments
     segment                       = var.segment == null ? false : var.segment
     agent_token                   = var.agent_token
+    master_token                  = var.master_token
     }
   )
   binary_trigger     = element(coalescelist(null_resource.download_binary[*].id, null_resource.upload_binary[*].id, [0]), 0)

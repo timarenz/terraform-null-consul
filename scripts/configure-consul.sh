@@ -25,4 +25,9 @@ sudo chmod 640 /etc/consul.d/consul.hcl
 sudo systemctl enable consul.service
 sudo systemctl restart consul.service
 sleep 5
-sudo systemctl status consul.service --no-pager 
+sudo systemctl status consul.service --no-pager
+
+until (curl http://127.0.0.1:8500/v1/status/leader 2>/dev/null | grep -E '".+"'); do
+  echo "Waiting for Consul agent startup..."
+  sleep 1
+done

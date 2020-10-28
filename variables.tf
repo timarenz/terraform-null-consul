@@ -79,11 +79,11 @@ variable "ui" {
   default     = true
 }
 
-variable "bootstrap" {
-  description = "This flag is used to control if a server is in 'bootstrap' mode. (https://www.consul.io/docs/agent/options.html#_bootstrap_expect)"
-  type        = bool
-  default     = true
-}
+# variable "bootstrap" {
+#   description = "This flag is used to control if a server is in 'bootstrap' mode. (https://www.consul.io/docs/agent/options.html#_bootstrap_expect)"
+#   type        = bool
+#   default     = true
+# }
 
 variable "bootstrap_expect" {
   description = "This flag provides the number of expected servers in the datacenter. (https://www.consul.io/docs/agent/options.html#_bootstrap_expect)"
@@ -326,6 +326,12 @@ variable "segments" {
 
 variable "agent_token" {
   description = "Used for clients and servers to perform internal operations. If this isn't specified, then the default will be used. (https://www.consul.io/docs/agent/options#acl_tokens_agent)"
+  type        = string
+  default     = ""
+}
+
+variable "master_token" {
+  description = "nly used for servers in the primary_datacenter. This token will be created with management-level permissions if it does not exist. It allows operators to bootstrap the ACL system with a token Secret ID that is well-known. (https://www.consul.io/docs/agent/options#acl_tokens_master)"
   type        = string
   default     = ""
 }

@@ -3,7 +3,7 @@ datacenter = "${datacenter}"
 data_dir = "${data_dir}"
 %{ if agent_type == "server" ~}
 server = true
-%{ if bootstrap ~}bootstrap_expect = ${bootstrap_expect}%{ endif }
+%{ if bootstrap_expect != 0 ~}bootstrap_expect = ${bootstrap_expect}%{ endif }
 performance {
   raft_multiplier = 1
 }%{ endif }
@@ -17,10 +17,10 @@ acl {
   enabled = true
   default_policy = "${default_policy}"
   enable_token_persistence = ${enable_token_persistence}
-  %{ if agent_token != "" ~}
   tokens {
-    agent = "${agent_token}"
-  }%{ endif }
+  %{ if agent_token != "" ~}agent = "${agent_token}"%{ endif }
+  %{ if agent_type == "server" && master_token != "" ~}master = "${master_token}"%{ endif }
+  }
 }%{ endif }
 retry_join = ${retry_join}
 %{ if retry_join_wan != "false" ~}retry_join_wan = ${retry_join_wan}%{ endif }
