@@ -62,6 +62,7 @@ ports {
 %{ if connect }
 connect {
   enabled = true
+  %{ if agent_type == "server" ~}enable_mesh_gateway_wan_federation = ${enable_mesh_gateway_wan_federation}%{ endif }
 }
 %{ endif }
 node_meta {

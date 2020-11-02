@@ -24,41 +24,42 @@ locals {
     retry_join       = jsonencode(var.retry_join)
     retry_join_wan   = var.retry_join_wan == null ? false : jsonencode(var.retry_join_wan)
     # encryption                    = var.encryption
-    enable_local_script_checks    = var.enable_local_script_checks
-    enable_central_service_config = var.enable_central_service_config
-    serf_lan                      = var.serf_lan == null ? false : var.serf_lan
-    serf_wan                      = var.serf_wan == null ? false : var.serf_wan
-    advertise_addr_wan            = var.advertise_addr_wan == null ? false : var.advertise_addr_wan
-    advertise_addr                = var.advertise_addr == null ? false : var.advertise_addr
-    translate_wan_addrs           = var.translate_wan_addrs
-    log_level                     = var.log_level
-    dns_port                      = var.dns_port
-    http_port                     = var.http_port
-    https_port                    = var.https_port
-    grpc_port                     = var.grpc_port
-    serf_lan_port                 = var.serf_lan_port
-    serf_wan_port                 = var.serf_wan_port
-    server_port                   = var.server_port
-    sidecar_min_port              = var.sidecar_min_port
-    sidecar_max_port              = var.sidecar_max_port
-    ca_file                       = var.ca_file == null ? false : var.ca_file
-    cert_file                     = var.cert_file == null ? false : var.cert_file
-    key_file                      = var.key_file == null ? false : var.key_file
-    auto_encrypt                  = var.auto_encrypt
-    verify_incoming               = var.verify_incoming
-    verify_incoming_rpc           = var.verify_incoming_rpc
-    verify_incoming_https         = var.verify_incoming_https
-    verify_outgoing               = var.verify_outgoing
-    verify_server_hostname        = var.verify_server_hostname
-    acl                           = var.acl
-    default_policy                = var.default_policy
-    enable_token_persistence      = var.enable_token_persistence
-    node_meta                     = var.node_meta == null ? {} : var.node_meta
-    autopilot                     = var.autopilot == null ? {} : var.autopilot
-    segments                      = var.segments == null ? [] : var.segments
-    segment                       = var.segment == null ? false : var.segment
-    agent_token                   = var.agent_token
-    master_token                  = var.master_token
+    enable_local_script_checks         = var.enable_local_script_checks
+    enable_central_service_config      = var.enable_central_service_config
+    serf_lan                           = var.serf_lan == null ? false : var.serf_lan
+    serf_wan                           = var.serf_wan == null ? false : var.serf_wan
+    advertise_addr_wan                 = var.advertise_addr_wan == null ? false : var.advertise_addr_wan
+    advertise_addr                     = var.advertise_addr == null ? false : var.advertise_addr
+    translate_wan_addrs                = var.translate_wan_addrs
+    log_level                          = var.log_level
+    dns_port                           = var.dns_port
+    http_port                          = var.http_port
+    https_port                         = var.https_port
+    grpc_port                          = var.grpc_port
+    serf_lan_port                      = var.serf_lan_port
+    serf_wan_port                      = var.serf_wan_port
+    server_port                        = var.server_port
+    sidecar_min_port                   = var.sidecar_min_port
+    sidecar_max_port                   = var.sidecar_max_port
+    ca_file                            = var.ca_file == null ? false : var.ca_file
+    cert_file                          = var.cert_file == null ? false : var.cert_file
+    key_file                           = var.key_file == null ? false : var.key_file
+    auto_encrypt                       = var.auto_encrypt
+    verify_incoming                    = var.verify_incoming
+    verify_incoming_rpc                = var.verify_incoming_rpc
+    verify_incoming_https              = var.verify_incoming_https
+    verify_outgoing                    = var.verify_outgoing
+    verify_server_hostname             = var.verify_server_hostname
+    acl                                = var.acl
+    default_policy                     = var.default_policy
+    enable_token_persistence           = var.enable_token_persistence
+    node_meta                          = var.node_meta == null ? {} : var.node_meta
+    autopilot                          = var.autopilot == null ? {} : var.autopilot
+    segments                           = var.segments == null ? [] : var.segments
+    segment                            = var.segment == null ? false : var.segment
+    agent_token                        = var.agent_token
+    master_token                       = var.master_token
+    enable_mesh_gateway_wan_federation = var.enable_mesh_gateway_wan_federation
     }
   )
   binary_trigger     = element(coalescelist(null_resource.download_binary[*].id, null_resource.upload_binary[*].id, [0]), 0)

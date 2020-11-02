@@ -335,3 +335,9 @@ variable "master_token" {
   type        = string
   default     = ""
 }
+
+variable "enable_mesh_gateway_wan_federation" {
+  description = "Controls whether cross-datacenter federation traffic between servers is funneled through mesh gateways. Defaults to false. This was added in Consul 1.8.0. (https://www.consul.io/docs/agent/options#connect_enable_mesh_gateway_wan_federation)"
+  type        = bool
+  default     = false
+}
