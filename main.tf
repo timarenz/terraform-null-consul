@@ -60,6 +60,10 @@ locals {
     agent_token                        = var.agent_token
     master_token                       = var.master_token
     enable_mesh_gateway_wan_federation = var.enable_mesh_gateway_wan_federation
+    audit_log                          = var.audit_log
+    audit_log_rotate_duration          = var.audit_log_rotate_duration
+    audit_log_rotate_max_files         = var.audit_log_rotate_max_files
+    audit_log_rotate_bytes             = var.audit_log_rotate_bytes
     }
   )
   binary_trigger     = element(coalescelist(null_resource.download_binary[*].id, null_resource.upload_binary[*].id, [0]), 0)

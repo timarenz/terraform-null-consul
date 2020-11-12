@@ -74,12 +74,24 @@ node_meta {
   %{ if segment != "false" }segment = "${segment}"%{ endif }
 %{ endif }
 %{ if agent_type == "server" }
+%{ if audit_log }
+audit {
+  enabled = true
+  sink "audit_log" {
+    type   = "file"
+    format = "json"
+    path   = "/var/log/consul/audit.json"
+    delivery_guarantee = "best-effort"
+    rotate_duration = "${audit_log_rotate_duration}"
+    rotate_max_files = ${audit_log_rotate_max_files}
+    rotate_bytes = ${audit_log_rotate_bytes}
+  }
+%{ endif }
 autopilot {
 %{ for k, v in autopilot }
   ${k} = "${v}"
 %{ endfor }
 }
-%{ if agent_type == "server" }
 segments = [
 %{ for s in segments }
   {
@@ -93,6 +105,5 @@ segments = [
   },
 %{ endfor }
 ]
-%{ endif }
 %{ endif }
 log_level = "${log_level}"

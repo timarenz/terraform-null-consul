@@ -341,3 +341,27 @@ variable "enable_mesh_gateway_wan_federation" {
   type        = bool
   default     = false
 }
+
+variable "audit_log" {
+  description = "Controls whether Consul logs out each time a user performs an operation. ACLs must be enabled to use this feature. Defaults to false. (https://www.consul.io/docs/agent/options.html#enabled-1)"
+  type        = bool
+  default     = false
+}
+
+variable "audit_log_rotate_duration" {
+  description = "Specifies the interval by which the system rotates to a new log file. At least one of rotate_duration or rotate_bytes must be configured to enable audit logging. (https://www.consul.io/docs/agent/options.html#rotate_duration)"
+  type        = string
+  default     = "24h"
+}
+
+variable "audit_log_rotate_max_files" {
+  description = "Defines the limit that Consul should follow before it deletes old log files. (https://www.consul.io/docs/agent/options.html#rotate_max_files)"
+  type        = number
+  default     = 15
+}
+
+variable "audit_log_rotate_bytes" {
+  description = "Specifies how large an individual log file can grow before Consul rotates to a new file. At least one of rotate_bytes or rotate_duration must be configured to enable audit logging. (https://www.consul.io/docs/agent/options.html#rotate_bytes)"
+  type        = number
+  default     = 25165824
+}
