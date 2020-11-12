@@ -3,7 +3,7 @@
 set -e
 
 sudo mkdir --parents /var/log/consul
-sudo chown --recursive /var/log/consul
+sudo chown --recursive consul:consul /var/log/consul
 
 sudo mkdir --parents /etc/consul.d/ssl
 sudo mv consul.hcl /etc/consul.d/consul.hcl
