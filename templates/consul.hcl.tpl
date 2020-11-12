@@ -86,6 +86,7 @@ audit {
     rotate_max_files = ${audit_log_rotate_max_files}
     rotate_bytes = ${audit_log_rotate_bytes}
   }
+}
 %{ endif }
 autopilot {
 %{ for k, v in autopilot }
